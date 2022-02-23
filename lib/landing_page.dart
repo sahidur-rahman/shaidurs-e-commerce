@@ -11,8 +11,22 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  double turns = 0;
+
+  Future<void> roated() async {
+    int i = 0;
+    while (i < 500) {
+      i++;
+      await Future.delayed(Duration(microseconds: 1));
+      setState(() {
+        turns += 1.0 / 500.0;
+      });
+    }
+  }
+
   @override
   void initState() {
+    roated();
     Timer(Duration(milliseconds: 3000), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -33,7 +47,15 @@ class _LandingPageState extends State<LandingPage> {
           children: [
             Image.asset('assets/images/welcome-to.png'),
             Image.asset('assets/images/e-shoes.png'),
-            Image.asset('assets/images/running-shoe.png'),
+            SizedBox(
+              height: 150.0,
+              width: 150.0,
+              child: AnimatedRotation(
+                turns: turns,
+                duration: Duration(milliseconds: 1000),
+                child: Image.asset('assets/images/running-shoe.png'),
+              ),
+            ),
           ],
         ),
       ),

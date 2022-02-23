@@ -100,13 +100,27 @@ class CustomActionBar extends StatelessWidget {
                     _totalItems = _documents.length;
                   }
 
-                  return Text(
-                    '$_totalItems',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  return Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.asset(
+                        'assets/images/shopping-cart.png',
+                        color: Colors.cyan,
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: ClipRRect(
+                          child: Text(
+                            '$_totalItems',
+                            style: TextStyle(
+                              color: Colors.redAccent,
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   );
                 },
               ),
