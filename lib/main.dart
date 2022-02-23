@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_training_ecommerce/screens/splash.dart';
+import 'package:flutter_training_ecommerce/landing_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // ignore: prefer_const_constructors
-      home: SplashScreen(),
+      home: LandingPage(),
     );
   }
 }
