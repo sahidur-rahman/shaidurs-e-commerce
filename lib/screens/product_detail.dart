@@ -23,6 +23,7 @@ class _ProductDetailState extends State<ProductDetail> {
   final FirebaseServices _firebaseServices = FirebaseServices();
 
   String _selectedSize = '0';
+  String _prPrice = '0';
 
   //Default Product page loading
   final bool _productPageLoading = false;
@@ -62,6 +63,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   //Collecting single data in map
                   Map<String, dynamic> data =
                       snapshot.data!.data() as Map<String, dynamic>;
+                  _prPrice = data['price'];
                   return ListView(
                     padding: EdgeInsets.only(
                       left: 8.0,
@@ -160,6 +162,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                         await _firebaseServices.addToCart(
                                       widget.productId,
                                       _selectedSize,
+                                      _prPrice,
                                     );
                                     _showSnackBar(message);
                                   },

@@ -54,16 +54,13 @@ class FirebaseServices {
     }
   }
 
-  Future<String> addToCart(
-    String productID,
-    String size,
-  ) async {
+  Future<String> addToCart(String productID, String size, String price) async {
     try {
       await usersRef
           .doc(getUserID())
           .collection('Cart')
           .doc(productID)
-          .set({'size': size});
+          .set({'size': size, 'price': price});
 
       return 'Product added to the cart.';
     } catch (e) {

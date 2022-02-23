@@ -2,9 +2,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_training_ecommerce/constants.dart';
 import 'package:flutter_training_ecommerce/screens/widgets/custom_action_bar.dart';
-import 'package:flutter_training_ecommerce/screens/widgets/custom_btn.dart';
+import 'package:flutter_training_ecommerce/screens/widgets/custom_cart_checkout.dart';
 import 'package:flutter_training_ecommerce/screens/widgets/custom_cart_saved.dart';
 import 'package:flutter_training_ecommerce/services/firebase_services.dart';
 
@@ -21,17 +20,8 @@ class CartDetail extends StatefulWidget {
 class _CartDetailState extends State<CartDetail> {
   final FirebaseServices _firebaseServices = FirebaseServices();
 
-  bool priceLoaded = false;
-  int _totalPrice = 0;
-
-  int setPrice(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) => setPrice(context));
-    return _totalPrice;
-  }
-
-  @override
-  void initState() {
-    super.initState();
+  void reLoadState() {
+    setState(() {});
   }
 
   @override
@@ -57,7 +47,6 @@ class _CartDetailState extends State<CartDetail> {
 
                 ///If connection state done means we got the data
                 if (snapshot.connectionState == ConnectionState.done) {
-                  _totalPrice = 0;
                   //_totalCartPrice = Stream.value(_totalPrice);
                   return ListView(
                     padding: EdgeInsets.only(top: 64.0),
@@ -68,8 +57,7 @@ class _CartDetailState extends State<CartDetail> {
 
                       //Creating view for every data
 
-                      FutureBuilder<DocumentSnapshot> futureDoc =
-                          FutureBuilder<DocumentSnapshot>(
+                      return FutureBuilder<DocumentSnapshot>(
                         future: _firebaseServices.productsRef
                             .doc(document.id)
                             .get(),
@@ -88,17 +76,13 @@ class _CartDetailState extends State<CartDetail> {
                             Map<String, dynamic> data = productSnapshot.data!
                                 .data() as Map<String, dynamic>;
 
-                            _totalPrice += int.parse('${data['price']}');
-                            // _totalCartPrice = Stream.value(_totalPrice);
-
                             return CustomCartSaved(
                               data: data,
                               size: '${dataItem['size']}',
                               docId: document.id,
                               onDelete: (docId) {
-                                setState(() {
-                                  _firebaseServices.removeFromCart(docId);
-                                });
+                                _firebaseServices.removeFromCart(docId);
+                                reLoadState();
                               },
                             );
                           }
@@ -111,9 +95,6 @@ class _CartDetailState extends State<CartDetail> {
                           );
                         },
                       );
-
-                      priceLoaded = true;
-                      return futureDoc;
                     }).toList(),
                   );
                 }
@@ -135,27 +116,7 @@ class _CartDetailState extends State<CartDetail> {
                   hasTitle: true,
                   hasCartBtnClbl: false,
                 ),
-                Container(
-                  child: Row(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width / 2,
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Total price : \$$_totalPrice',
-                          style: Constants.regularBoldFontRed,
-                        ),
-                      ),
-                      Expanded(
-                        child: CustomBtn(
-                          text: 'Checkout',
-                          onPressed: () {},
-                          isOutlined: false,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                CustomCartCheckout(),
               ],
             ),
           ],
